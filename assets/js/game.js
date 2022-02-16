@@ -6,6 +6,12 @@ var playerMoney = 10;
 var enemyNames = ["Roberto", "Amy Android", "Robo Trumble"];
 enemyAttack = 10;
 
+//if we want a random number between 'min' and 'max', we use the function below
+var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+    return value;
+}
+
 var fight = function(enemyName) {
     while (enemyHealth > 0 && playerHealth > 0){
         var promptfight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
@@ -15,14 +21,15 @@ var fight = function(enemyName) {
 
             if (confirmSkip) {
                 window.alert(playerName + " has decided to skip this fight. Goodbye!");
-                playerMoney -= 10
+                playerMoney = Math.max(0, playerMoney - 10);
                 console.log("playermoney", playerMoney);
                 break;
             }
         } 
 
-        //subtract 'playerAttack' from 'enemyhealth'
-        enemyHealth -= playerAttack;
+        //generate random damage value based on player's attack power
+        var damage = randomNumber(playerAttack - 3, playerAttack);
+        enemyHealth = Math.max(0, enemyHealth - damage);
         //log resulting message
         console.log(playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining.");
         //check enemy health
@@ -37,7 +44,8 @@ var fight = function(enemyName) {
         }
 
         //subtract 'enemyAttack' from 'playerHealth'
-        playerHealth -= enemyAttack;
+        var damage = randomNumber(enemyAttack - 3, enemyAttack);
+        playerHealth = Math.max(0, playerHealth - enemyAttack);
         //log resulting message
         console.log(enemyName + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining.");
         //check player health
@@ -118,7 +126,7 @@ var startGame = function() {
             var pickedEnemyName = enemyNames[i];
 
             //reset enemyHealth before starting new fight
-            enemyHealth = 50;
+            enemyHealth = randomNumber(40, 60);
 
             //pass the pickedEnemyName variable's value into the function
             fight(pickedEnemyName[i]);
@@ -145,3 +153,4 @@ startGame();{
     playerAttack = 10;
     playerMoney = 10;
 }
+

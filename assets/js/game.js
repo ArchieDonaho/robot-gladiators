@@ -5,23 +5,34 @@ var randomNumber = function(min, max) {
 }
 
 
+var fightOrSkip = function() {
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    promptFight = promptFight.toLowerCase();
+    if(promptFight === "" || promptFight === null){
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+
+    if(promptFight === "skip"){
+        var confirmSkip = window.confirm("are you sure you'd like to quit?");
+
+        if(confirmSkip){
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+            return true;
+        }
+    }
+    return false;
+}
+
 
 var fight = function(enemy) {
     console.log(enemy);
     while (enemy.health > 0 && playerInfo.health > 0){
-        var promptfight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-        
-        if (promptfight === "skip" || promptfight === "SKIP") {
-            var confirmSkip = window.confirm("are you sure you'd like to quit?");
-
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money);
-                break;
-            }
-        } 
-
+        if(fightOrSkip()) {
+            //if true, leave fight by breaking the loop
+            break;
+        }
         //generate random damage value based on player's attack power
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
         enemy.health = Math.max(0, enemy.health - damage);
@@ -145,7 +156,7 @@ var enemyInfo = [{name: "Roberto", attack: randomNumber(10, 14)},
                  {name: "Amy Android", attack: randomNumber(10, 14)}, 
                  {name: "Robo Trumble", attack: randomNumber(10, 14)}
                 ];
-
+debugger;
 //function to start a new game
 var startGame = function() {
     //reset player stats
